@@ -63,52 +63,42 @@
     </main>
 
     <script>
-        function makeChoice(choice) {
-            // Add distortion effect
-            document.body.classList.add('distortion');
+        const choicesContainer = document.querySelector('.choices-container');
 
-            // Simulate story progression
-            const storyText = document.querySelector('.story-text');
-            const choices = document.querySelectorAll('.choice-btn');
+function makeChoice(choice) {
+    if (document.body.classList.contains('distortion')) return; // prevent multiple clicks
 
-            // Fade out current content
-            document.querySelector('.story-container').style.opacity = '0.5';
-            document.querySelector('.choices-container').style.opacity = '0.5';
+    document.body.classList.add('distortion');
 
-            setTimeout(() => {
-                if (choice === 1) {
-                    storyText.textContent = "You descend the spiral staircase, each step echoing in the void below. The whispers become clearer now—they speak your name, calling you deeper into the abyss. Suddenly, your candle extinguishes, leaving you in complete darkness. You hear something breathing behind you, its hot breath on your neck. Do you dare to turn around, or will you continue blindly into the unknown depths?";
-                    choices[0].innerHTML = "<strong>Turn around to face what's behind you</strong><br>Confront the presence that breathes down your neck in the darkness";
-                    choices[1].innerHTML = "<strong>Continue deeper into the abyss</strong><br>Press forward blindly, following the whispers that call your name";
-                } else {
-                    storyText.textContent = "You step into the shadow chamber, and immediately the dancing shadows surround you like living creatures. They caress your skin with an otherworldly chill, and you realize they are not mere shadows—they are the remnants of those who came before. In the center of the room, a mirror reflects not your image, but the faces of the lost souls. One shadow extends what appears to be a hand, while another points toward a hidden passage behind the mirror.";
-                    choices[0].innerHTML = "<strong>Take the shadow's hand</strong><br>Allow the ghostly presence to guide you into their eternal dance";
-                    choices[1].innerHTML = "<strong>Follow the passage behind the mirror</strong><br>Step through the looking glass into whatever lies beyond";
-                }
+    const storyText = document.querySelector('.story-text');
+    const choices = document.querySelectorAll('.choice-btn');
 
-                // Fade back in
-                document.querySelector('.story-container').style.opacity = '1';
-                document.querySelector('.choices-container').style.opacity = '1';
+    // Fade out current content
+    document.querySelector('.story-container').style.opacity = '0';
+    choicesContainer.style.opacity = '0';
 
-                // Remove distortion effect
-                setTimeout(() => {
-                    document.body.classList.remove('distortion');
-                }, 300);
-            }, 800);
+    setTimeout(() => {
+        if (choice === 1) {
+            storyText.textContent = "You descend the spiral staircase...";
+            choices[0].innerHTML = "<strong>Turn around to face what's behind you</strong><br>Confront the presence that breathes down your neck in the darkness";
+            choices[1].innerHTML = "<strong>Continue deeper into the abyss</strong><br>Press forward blindly, following the whispers that call your name";
+        } else {
+            storyText.textContent = "You step into the shadow chamber...";
+            choices[0].innerHTML = "<strong>Take the shadow's hand</strong><br>Allow the ghostly presence to guide you into their eternal dance";
+            choices[1].innerHTML = "<strong>Follow the passage behind the mirror</strong><br>Step through the looking glass into whatever lies beyond";
         }
 
-        // Add some interactive hover effects for enhanced atmosphere
-        document.addEventListener('mousemove', (e) => {
-            const eyes = document.querySelectorAll('.glowing-eyes');
-            eyes.forEach(eye => {
-                const rect = eye.getBoundingClientRect();
-                const eyeX = rect.left + rect.width / 2;
-                const eyeY = rect.top + rect.height / 2;
-                const angle = Math.atan2(e.clientY - eyeY, e.clientX - eyeX);
-                const distance = Math.min(3, Math.sqrt(Math.pow(e.clientX - eyeX, 2) + Math.pow(e.clientY - eyeY, 2)) / 50);
-                eye.style.transform = `translate(${Math.cos(angle) * distance}px, ${Math.sin(angle) * distance}px)`;
-            });
-        });
+        // Fade back in
+        document.querySelector('.story-container').style.opacity = '1';
+        choicesContainer.style.opacity = '1';
+
+        // Remove distortion effect
+        setTimeout(() => {
+            document.body.classList.remove('distortion');
+        }, 300);
+    }, 800);
+}
+
     </script>
 </body>
 </html>

@@ -97,117 +97,32 @@
     </button>
 </form>
 <script>
-    document.getElementById('storyInitForm').addEventListener('submit', function(e) {
-  e.preventDefault();
+document.addEventListener("DOMContentLoaded", () => {
+    const form = document.getElementById("storyInitForm");
+    const beginBtn = document.getElementById("beginBtn");
 
-  const form = this;
-  const name = form.playerName.value.trim();
-  const blueprint = form.storyBlueprint.value.trim();
-  const protocol = form.narrativeProtocol.value;
-  const duration = form.storyDuration.value;
+    if (form) {
+        form.addEventListener("submit", (e) => {
+            const name = form.querySelector("input[name='name']").value.trim();
+            const blueprint = form.querySelector("textarea[name='blueprint']").value.trim();
+            const protocol = form.querySelector("select[name='protocol']").value;
 
-  // Validate required fields
-  if (!name || !blueprint || !protocol) {
-    showWhisper("The shadows demand all fields be completed...");
-    return;
-  }
+            // Basic client-side validation
+            if (!name || !blueprint || !protocol) {
+                e.preventDefault(); // Stop form from submitting
+                alert("Please complete all required fields, wanderer.");
+                return;
+            }
 
-  // Disable button and update text
-  const btn = document.getElementById('beginBtn');
-  btn.textContent = '✨ Weaving your nightmare... ✨';
-  btn.disabled = true;
-  btn.style.opacity = '0.7';
-
-  showWhisper("Your fate is sealed...");
-
-  // Start fade-out animation and show transition message
-  setTimeout(() => {
-    document.body.classList.add('fade-out');
-
-    setTimeout(() => {
-      showTransitionMessage({ name, blueprint, protocol, duration });
-
-      // Submit the form after showing the message (adjust delay if needed)
-      setTimeout(() => {
-        form.submit();
-      }, 3000);
-
-    }, 1000);
-  }, 1500);
+            // Optional: Disable button and show loading
+            if (beginBtn) {
+                beginBtn.disabled = true;
+                beginBtn.textContent = "Summoning Shadows...";
+            }
+        });
+    }
 });
 
-// Helper to show whisper text temporarily
-function showWhisper(text) {
-  const whisper = document.createElement('div');
-  whisper.className = 'whisper-effect';
-  whisper.textContent = text;
-  document.body.appendChild(whisper);
-  setTimeout(() => whisper.remove(), 2000);
-}
-
-// Display transition message with escaped user input
-function showTransitionMessage(formData) {
-  document.body.innerHTML = `
-    <div style="
-      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-      background: linear-gradient(135deg, #0a0a0a 0%, #1a0f1a 50%, #0a0a0a 100%);
-      display: flex; flex-direction: column; align-items: center; justify-content: center;
-      color: #ff6b6b; font-family: 'Creepster', cursive; text-align: center;
-      animation: fadeIn 2s ease-in;
-    ">
-      <h1 style="font-size: 3rem; margin-bottom: 2rem; text-shadow: 0 0 30px #ff6b6b;">
-        Welcome, ${escapeHtml(formData.name)}
-      </h1>
-      <p style="font-size: 1.5rem; color: #ccc; font-family: 'Crimson Text', serif; margin-bottom: 3rem;">
-        Your nightmare begins now...
-      </p>
-      <div style="
-        background: rgba(15, 15, 15, 0.9);
-        border: 1px solid rgba(139, 69, 19, 0.4);
-        border-radius: 15px; padding: 2rem; max-width: 500px;
-        backdrop-filter: blur(20px);
-        font-family: 'Crimson Text', serif; color: #e0e0e0; line-height: 1.6;
-      ">
-        <strong>Story Blueprint:</strong> ${escapeHtml(formData.blueprint)}<br><br>
-        <strong>Duration:</strong> ${getDurationText(formData.duration)}<br><br>
-        <strong>Format:</strong> ${getProtocolText(formData.protocol)}
-      </div>
-      <button onclick="window.location.href='index.html'" style="
-        margin-top: 3rem; padding: 1rem 2rem;
-        background: linear-gradient(135deg, rgba(139, 69, 19, 0.6), rgba(60, 30, 30, 0.8));
-        border: 2px solid rgba(139, 69, 19, 0.7); border-radius: 12px;
-        color: #fff; font-size: 1.1rem; font-family: 'Crimson Text', serif;
-        cursor: pointer; transition: all 0.3s ease;
-      ">
-        🔙 Return to Initialization
-      </button>
-    </div>
-  `;
-}
-
-function escapeHtml(text) {
-  const map = {
-    '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;'
-  };
-  return text.replace(/[&<>"']/g, m => map[m]);
-}
-
-const durationLabels = ['', 'Short (5 mins)', 'Medium (10 mins)', 'Long (15+ mins)'];
-const protocolLabels = {
-  'lostSoul': '👻 A Lost Soul (Desperate, emotional, first-person)',
-  'ancientEntity': '💀 An Ancient Entity (All-knowing, cryptic)',
-  'childSpirit': '🧒 A Child Spirit (Innocent, eerie tone)',
-  'unknownVoice': '🕯️ The Unknown Voice (Shifting, unreliable narrator)',
-  'you': '🩸 You (The story is about you — in second person)'
-};
-
-function getDurationText(value) {
-  return durationLabels[value] || 'Medium (10 mins)';
-}
-
-function getProtocolText(value) {
-  return protocolLabels[value] || value;
-}
 
 </script>
 
