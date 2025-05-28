@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bienvenue à Dead End - Initialize Your Nightmare</title>
+       <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <!-- Background Image -->
+    <div class="bg-image"></div>
+
+    <!-- Background Animation Elements -->
+    <div class="bg-animation">
+        <div class="floating-mist mist-1"></div>
+        <div class="floating-mist mist-2"></div>
+        <div class="floating-mist mist-3"></div>
+        <div class="moonlight"></div>
+        <div class="tree-shadow tree-1"></div>
+        <div class="tree-shadow tree-2"></div>
+        <div class="tree-shadow tree-3"></div>
+    </div>
+
+    <!-- Main Container -->
+    <div class="init-container">
+        <!-- Header -->
+        <div class="init-header">
+            <h1 class="init-title">Bienvenue à Dead End</h1>
+            <p class="init-subtitle">Forge your path into darkness...</p>
+        </div>
+
+        <!-- Form Card -->
+        <div class="form-card">
+           <form id="storyInitForm" method="POST" action="/">
+    <div class="form-group">
+        <label class="form-label" for="playerName">Your Name</label>
+        <input
+            type="text"
+            id="playerName"
+            name="name"
+            class="form-input"
+            placeholder="Enter your name, wanderer..."
+            required
+        >
+    </div>
+
+    <div class="form-group">
+        <label class="form-label" for="storyBlueprint">Story Blueprint</label>
+        <textarea
+            id="storyBlueprint"
+            name="blueprint"
+            class="form-textarea"
+            placeholder="e.g., A man lost in a forest with his car..."
+            required
+        ></textarea>
+    </div>
+
+    <div class="form-group">
+        <label class="form-label" for="storyDuration">Story Duration</label>
+        <div class="duration-container">
+            <input
+                type="range"
+                id="storyDuration"
+                name="duration"
+                class="duration-slider"
+                min="1"
+                max="3"
+                value="2"
+            >
+            <div class="duration-labels">
+                <span>Short (5 mins)</span>
+                <span>Medium (10 mins)</span>
+                <span>Long (15+ mins)</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="form-label" for="narrativeProtocol">Narrative Protocol</label>
+        <select
+            id="narrativeProtocol"
+            name="protocol"
+            class="form-select"
+            required
+        >
+            <option value="" disabled selected>— Choose your narrator —</option>
+            <option value="lostSoul">👻 A Lost Soul (Desperate, emotional, first-person)</option>
+            <option value="ancientEntity">💀 An Ancient Entity (All-knowing, cryptic)</option>
+            <option value="childSpirit">🧒 A Child Spirit (Innocent, eerie tone)</option>
+            <option value="unknownVoice">🕯️ The Unknown Voice (Shifting, unreliable narrator)</option>
+            <option value="you">🩸 You (The story is about you — in second person)</option>
+        </select>
+    </div>
+
+    <button type="submit" class="begin-btn" id="beginBtn">
+        🕯️ Begin the Nightmare 🕯️
+    </button>
+</form>
+<script>
+    document.getElementById('storyInitForm').addEventListener('submit', function(e) {
+    e.preventDefault();  // Stop actual form submission
+
+    // Get form values
+    const formData = {
+        name: document.getElementById('playerName').value.trim(),
+        blueprint: document.getElementById('storyBlueprint').value.trim(),
+        duration: document.getElementById('storyDuration').value,
+        protocol: document.getElementById('narrativeProtocol').value
+    };
+
+    // Validate
+    if (!formData.name || !formData.blueprint || !formData.protocol) {
+        alert("Please fill in all required fields!");
+        return;
+    }
+
+    // Update button and disable it
+    const btn = document.getElementById('beginBtn');
+    btn.textContent = '✨ Weaving your nightmare... ✨';
+    btn.disabled = true;
+    btn.style.opacity = '0.7';
+
+    // Show whisper (optional)
+    alert("Your fate is sealed...");
+
+    // After 3 seconds, redirect to index.html
+    setTimeout(() => {
+        window.location.href = "index.html";
+    }, 3000);
+});
+
+  // Narrative Protocol labels mapping
+  const protocolLabels = {
+    'lostSoul': '👻 A Lost Soul (Desperate, emotional, first-person)',
+    'ancientEntity': '💀 An Ancient Entity (All-knowing, cryptic)',
+    'childSpirit': '🧒 A Child Spirit (Innocent, eerie tone)',
+    'unknownVoice': '🕯️ The Unknown Voice (Shifting, unreliable narrator)',
+    'you': '🩸 You (The story is about you — in second person)'
+  };
+
+  const durationLabels = ['', 'Short (5 mins)', 'Medium (10 mins)', 'Long (15+ mins)'];
+
+  // Submit handler with fixed 'this' reference
+  document.getElementById('storyInitForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    const form = this; // Save the form reference here
+
+    const name = form.playerName.value.trim();
+    const blueprint = form.storyBlueprint.value.trim();
+    const protocol = form.narrativeProtocol.value;
+    const duration = form.storyDuration.value;
+
+    if (!name || !blueprint || !protocol) {
+      showWhisper("The shadows demand all fields be completed...");
+      return;
+    }
+
+    beginNightmare({ name, blueprint, protocol, duration });
+
+    setTimeout(() => {
+      form.submit();
+    }, 3500);
+  });
+
+  // Your existing functions for animation and UI transition
+  function beginNightmare(formData) {
+    const btn = document.getElementById('beginBtn');
+    btn.textContent = '✨ Weaving your nightmare... ✨';
+    btn.disabled = true;
+    btn.style.opacity = '0.7';
+
+    showWhisper("Your fate is sealed...");
+
+    setTimeout(() => {
+      document.body.classList.add('fade-out');
+
+      setTimeout(() => {
+        showTransitionMessage(formData);
+      }, 1000);
+    }, 1500);
+  }
+
+  function showWhisper(text) {
+    const whisper = document.createElement('div');
+    whisper.className = 'whisper-effect';
+    whisper.textContent = text;
+    document.body.appendChild(whisper);
+    setTimeout(() => whisper.remove(), 2000);
+  }
+
+  function showTransitionMessage(formData) {
+    document.body.innerHTML = `
+      <div style="
+        position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+        background: linear-gradient(135deg, #0a0a0a 0%, #1a0f1a 50%, #0a0a0a 100%);
+        display: flex; flex-direction: column; align-items: center; justify-content: center;
+        color: #ff6b6b; font-family: 'Creepster', cursive; text-align: center;
+        animation: fadeIn 2s ease-in;
+      ">
+        <h1 style="font-size: 3rem; margin-bottom: 2rem; text-shadow: 0 0 30px #ff6b6b;">
+          Welcome, ${escapeHtml(formData.name)}
+        </h1>
+        <p style="font-size: 1.5rem; color: #ccc; font-family: 'Crimson Text', serif; margin-bottom: 3rem;">
+          Your nightmare begins now...
+        </p>
+        <div style="
+          background: rgba(15, 15, 15, 0.9);
+          border: 1px solid rgba(139, 69, 19, 0.4);
+          border-radius: 15px; padding: 2rem; max-width: 500px;
+          backdrop-filter: blur(20px);
+          font-family: 'Crimson Text', serif; color: #e0e0e0; line-height: 1.6;
+        ">
+          <strong>Story Blueprint:</strong> ${escapeHtml(formData.blueprint)}<br><br>
+          <strong>Duration:</strong> ${getDurationText(formData.duration)}<br><br>
+          <strong>Format:</strong> ${getProtocolText(formData.protocol)}
+        </div>
+        <button onclick="window.location.href='index.html'" style="
+          margin-top: 3rem; padding: 1rem 2rem;
+          background: linear-gradient(135deg, rgba(139, 69, 19, 0.6), rgba(60, 30, 30, 0.8));
+          border: 2px solid rgba(139, 69, 19, 0.7); border-radius: 12px;
+          color: #fff; font-size: 1.1rem; font-family: 'Crimson Text', serif;
+          cursor: pointer; transition: all 0.3s ease;
+        ">
+          🔙 Return to Initialization
+        </button>
+      </div>
+    `;
+  }
+
+  function escapeHtml(text) {
+    const map = {
+      '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;'
+    };
+    return text.replace(/[&<>"']/g, m => map[m]);
+  }
+
+  function getDurationText(value) {
+    return durationLabels[value] || 'Medium (10 mins)';
+  }
+
+  function getProtocolText(value) {
+    return protocolLabels[value] || value;
+  }
+</script>
+
+</body>
+</html>
